@@ -15,6 +15,19 @@ program.command("add-log <entity_id> <hash>")
         }
     })
 
+program.command("delete-entity <entity_id>")
+    .option("-c, --contract <contract>", "Log smart contract address")
+    .option("-r, --remote-signer <url>", "Remote signer url")
+    .action(async (entity_id, command) => {
+        try {
+            const contractService = new ContractService(command.contract)
+            const { includedInBlock, hash } = await contractService.deleteEntity(entity_id)
+            console.log(`Entity deleted: ${entity_id}`, { includedInBlock, hash, contract: command.contract })
+        } catch (ex) {
+            console.error(ex)
+        }
+    })
+
 program.command("set-owner <new_owner>")
     .option("-c, --contract <contract>", "Smart contract address")
     .option("-r, --remote-signer <url>", "Remote signer url")

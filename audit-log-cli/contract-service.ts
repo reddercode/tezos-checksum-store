@@ -6,23 +6,23 @@ Tezos.setProvider({ rpc: "https://api.tez.ie/rpc/babylonnet" })
 export class ContractService {
 
     private async setup() {
-        return Tezos.importKey("cfqlvwse.tfbjtsqp@tezos.example.org", "GEWtP9Q8RE", [
-            "artefact",
-            "dolphin",
-            "people",
-            "attend",
-            "laptop",
-            "raise",
-            "dawn",
-            "grocery",
-            "quick",
-            "execute",
-            "step",
-            "capable",
-            "camera",
-            "indoor",
-            "end"
-        ].join(" "), "ae595863b08df37815b788ea6056ac62b8a3398f")
+        // return Tezos.importKey("cfqlvwse.tfbjtsqp@tezos.example.org", "GEWtP9Q8RE", [
+        //     "artefact",
+        //     "dolphin",
+        //     "people",
+        //     "attend",
+        //     "laptop",
+        //     "raise",
+        //     "dawn",
+        //     "grocery",
+        //     "quick",
+        //     "execute",
+        //     "step",
+        //     "capable",
+        //     "camera",
+        //     "indoor",
+        //     "end"
+        // ].join(" "), "ae595863b08df37815b788ea6056ac62b8a3398f")
         return Tezos.importKey("peqjckge.qkrrajzs@tezos.example.org", "y4BX7qS1UE", [
             "skate",
             "damp",
@@ -60,6 +60,24 @@ export class ContractService {
         const contract = await this.contractInstance
         try {
             const op = await contract.methods.addLog(entity_id, hash).send()
+            await op.confirmation()
+            if (op.status !== 'applied') {
+                throw new Error("Operation was not applied")
+            }
+
+            return op
+        } catch (ex) {
+            const { owner } = await contract.storage()
+            const currentSigner = await Tezos.signer.publicKeyHash()
+            throw Object.assign(ex, { owner, currentSigner })
+        }
+    }
+
+    public async deleteEntity(entity_id: string) {
+        await this.setup();
+        const contract = await this.contractInstance
+        try {
+            const op = await contract.methods.deleteEntity(entity_id).send()
             await op.confirmation()
             if (op.status !== 'applied') {
                 throw new Error("Operation was not applied")
