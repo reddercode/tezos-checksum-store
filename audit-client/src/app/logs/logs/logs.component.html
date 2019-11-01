@@ -1,0 +1,17 @@
+<ng-container *ngIf='entity$ | async as entity'>
+  <p>Logs detail for entity {{entity.id}}</p>
+  <p>Last hash: {{entity.hash}} at {{entity.date_updated}}</p>
+  <h3>Update history</h3>
+<table>
+  <thead>
+    <th>Hash</th>
+    <th>Updated</th>
+  </thead>
+  <tbody>
+  <tr *ngFor='let update of updates$ | async'>
+    <td>{{update.hash}}</td>
+    <td>{{update.date_updated}}</td>
+  </tr>
+  </tbody>
+</table>
+<ng-container>

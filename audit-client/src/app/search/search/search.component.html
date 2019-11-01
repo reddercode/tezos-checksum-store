@@ -1,0 +1,12 @@
+<table>
+  <thead>
+    <th>ID</th>
+    <th>Added</th>
+  </thead>
+  <tbody>
+  <tr [routerLink]='["/logs", key.id]' *ngFor='let key of keys$ | async'>
+    <td>{{key.id}}</td>
+    <td>{{key.added}}</td>
+  </tr>
+  </tbody>
+</table>
