@@ -12,9 +12,7 @@
   "dependencies": {
     "@taquito/signer": "^5.1.0-beta.1",
     "@taquito/taquito": "^5.1.0-beta.1",
-    "commander": "^3.0.2"
-  },
-  "devDependencies": {
+    "commander": "^3.0.2",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.4"
   }
