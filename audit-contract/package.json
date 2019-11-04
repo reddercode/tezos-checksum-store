@@ -8,7 +8,7 @@
   "scripts": {
     "build": "node build.js",
     "deploy": "node deploy.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node deploy.js && node test/audit.spec.js"
   },
   "author": "",
   "license": "ISC",
