@@ -15,6 +15,19 @@ program.command("add-log <entity_id> <hash>")
         }
     })
 
+program.command("deploy")
+    .option("-o, --owner <owner>", "Initial owner of the contract")
+    .option("-r, --remote-signer <url>", "Remote signer url")
+    .action(async (command) => {
+        try {
+            const contractService = new ContractService(command.owner)
+            const { includedInBlock, hash, contractAddress } = await contractService.deploy(command.owner)
+            console.log(`Contract deployed: ${contractAddress}`, { includedInBlock, hash, contract: command.contract })
+        } catch (ex) {
+            console.error(ex)
+        }
+    })
+
 program.command("delete-entity <entity_id>")
     .option("-c, --contract <contract>", "Log smart contract address")
     .option("-r, --remote-signer <url>", "Remote signer url")

@@ -1,6 +1,8 @@
 import { Tezos } from '@taquito/taquito'
 import { Contract } from '@taquito/taquito/dist/types/contract/contract'
 
+const fs = require('fs')
+
 Tezos.setProvider({ rpc: "https://api.tez.ie/rpc/babylonnet" })
 
 export class ContractService {
@@ -71,6 +73,21 @@ export class ContractService {
             const currentSigner = await Tezos.signer.publicKeyHash()
             throw Object.assign(ex, { owner, currentSigner })
         }
+    }
+
+    public async deploy(owner?: string) {
+        await this.setup();
+        const op = await Tezos.contract.originate({
+            code: JSON.parse(fs.readFileSync("./Audit.json").toString()),
+            init: {
+                "prim": "Pair",
+                "args":
+                    [[],
+                    { "string": owner || await Tezos.signer.publicKeyHash() }]
+            },
+        })
+        await op.confirmation()
+        return op;
     }
 
     public async deleteEntity(entity_id: string) {
