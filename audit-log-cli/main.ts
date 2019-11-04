@@ -5,6 +5,7 @@ program.version('0.0.1');
 program.command("add-log <entity_id> <hash>")
     .option("-c, --contract <contract>", "Log smart contract address")
     .option("-r, --remote-signer <url>", "Remote signer url")
+    .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (entity_id, logHash, command) => {
         try {
             const contractService = new ContractService(command.contract)
@@ -18,6 +19,7 @@ program.command("add-log <entity_id> <hash>")
 program.command("deploy")
     .option("-o, --owner <owner>", "Initial owner of the contract")
     .option("-r, --remote-signer <url>", "Remote signer url")
+    .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (command) => {
         try {
             const contractService = new ContractService(command.owner)
@@ -31,6 +33,7 @@ program.command("deploy")
 program.command("delete-entity <entity_id>")
     .option("-c, --contract <contract>", "Log smart contract address")
     .option("-r, --remote-signer <url>", "Remote signer url")
+    .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (entity_id, command) => {
         try {
             const contractService = new ContractService(command.contract)
@@ -44,6 +47,7 @@ program.command("delete-entity <entity_id>")
 program.command("set-owner <new_owner>")
     .option("-c, --contract <contract>", "Smart contract address")
     .option("-r, --remote-signer <url>", "Remote signer url")
+    .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (new_owner, command) => {
         try {
             const contractService = new ContractService(command.contract)

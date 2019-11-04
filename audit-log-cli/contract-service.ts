@@ -3,8 +3,6 @@ import { Contract } from '@taquito/taquito/dist/types/contract/contract'
 
 const fs = require('fs')
 
-Tezos.setProvider({ rpc: "https://api.tez.ie/rpc/babylonnet" })
-
 export class ContractService {
 
     private async setup() {
@@ -55,7 +53,9 @@ export class ContractService {
         }
     }
 
-    constructor(private contractAddress: string) { }
+    constructor(private contractAddress: string, url?: string) {
+        Tezos.setProvider({ rpc: url || "https://api.tez.ie/rpc/babylonnet" })
+    }
 
     public async addLog(entity_id: string, hash: string) {
         await this.setup();
