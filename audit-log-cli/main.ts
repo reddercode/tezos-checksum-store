@@ -22,7 +22,7 @@ program.command("deploy")
         try {
             const contractService = new ContractService(command.owner)
             const { includedInBlock, hash, contractAddress } = await contractService.deploy(command.owner)
-            console.log(`Contract deployed: ${contractAddress}`, { includedInBlock, hash, contract: command.contract })
+            console.log(`Contract deployed: ${contractAddress}`, { includedInBlock, hash, contract: contractAddress })
         } catch (ex) {
             console.error(ex)
         }
