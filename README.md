@@ -25,13 +25,17 @@ In this Repo you will find tools necessary to achieve the publication of your lo
 `docker pull carte7000/audit-logs-cli`
 
 Deploy your own instance of the contract
+
 `docker run carte7000/audit-logs-cli deploy`
 
 Add a log entry to the registry
+
 `docker run carte7000/audit-logs-cli add-log -c <address> entity1 test_hash`
 
 Delete an entity from the contract storage
+
 `docker run carte7000/audit-logs-cli delete-entity -c <address> entity1`
 
 Change the owner of the contract (Only the owner can perform action on the contract)
+
 `docker run carte7000/audit-logs-cli set-owner -c <address> entity1 <new_owner>`
