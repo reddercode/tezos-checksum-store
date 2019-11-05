@@ -1,4 +1,4 @@
-# Audit log checksum store
+# Tezos Checksum Store
 
 ## Goals
 IT Managers need to prove the integrity of audit logs, but traditional
