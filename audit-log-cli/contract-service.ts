@@ -2,44 +2,16 @@ import { Tezos } from '@taquito/taquito'
 import { Contract } from '@taquito/taquito/dist/types/contract/contract'
 
 const fs = require('fs')
+const { email, password, mnemonic, secret } = JSON.parse(fs.readFileSync('./faucet.json').toString())
 
 export class ContractService {
 
     private async setup() {
-        // return Tezos.importKey("cfqlvwse.tfbjtsqp@tezos.example.org", "GEWtP9Q8RE", [
-        //     "artefact",
-        //     "dolphin",
-        //     "people",
-        //     "attend",
-        //     "laptop",
-        //     "raise",
-        //     "dawn",
-        //     "grocery",
-        //     "quick",
-        //     "execute",
-        //     "step",
-        //     "capable",
-        //     "camera",
-        //     "indoor",
-        //     "end"
-        // ].join(" "), "ae595863b08df37815b788ea6056ac62b8a3398f")
-        return Tezos.importKey("peqjckge.qkrrajzs@tezos.example.org", "y4BX7qS1UE", [
-            "skate",
-            "damp",
-            "faculty",
-            "morning",
-            "bring",
-            "ridge",
-            "traffic",
-            "initial",
-            "piece",
-            "annual",
-            "give",
-            "say",
-            "wrestle",
-            "rare",
-            "ability"
-        ].join(" "), "7d4c8c3796fdbf4869edb5703758f0e5831f5081")
+        if (this.secretKey) {
+            return Tezos.importKey(this.secretKey)
+        } else {
+            return Tezos.importKey(email, password, mnemonic.join(" "), secret)
+        }
     }
 
     private _contractInstance: Promise<Contract> | null = null;
@@ -53,7 +25,7 @@ export class ContractService {
         }
     }
 
-    constructor(private contractAddress: string, url?: string) {
+    constructor(private contractAddress: string, url?: string, private secretKey?: string) {
         Tezos.setProvider({ rpc: url || "https://api.tez.ie/rpc/babylonnet" })
     }
 
