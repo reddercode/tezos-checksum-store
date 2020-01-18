@@ -8,7 +8,7 @@ program.command("add-log <entity_id> <hash>")
     .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (entity_id, logHash, command) => {
         try {
-            const contractService = new ContractService(command.contract, process.env['SECRET_KEY'])
+            const contractService = new ContractService(command.contract, command.rpcUrl, process.env['SECRET_KEY'])
             const { includedInBlock, hash } = await contractService.addLog(entity_id, logHash)
             console.log(`Log entry added for entity: ${entity_id}`, { includedInBlock, hash, contract: command.contract })
         } catch (ex) {
@@ -22,7 +22,7 @@ program.command("deploy")
     .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (command) => {
         try {
-            const contractService = new ContractService(command.owner, process.env['SECRET_KEY'])
+            const contractService = new ContractService(command.owner, command.rpcUrl, process.env['SECRET_KEY'])
             const { includedInBlock, hash, contractAddress } = await contractService.deploy(command.owner)
             console.log(`Contract deployed: ${contractAddress}`, { includedInBlock, hash, contract: contractAddress })
         } catch (ex) {
@@ -36,7 +36,7 @@ program.command("delete-entity <entity_id>")
     .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (entity_id, command) => {
         try {
-            const contractService = new ContractService(command.contract)
+            const contractService = new ContractService(command.contract, command.rpcUrl, process.env['SECRET_KEY'])
             const { includedInBlock, hash } = await contractService.deleteEntity(entity_id)
             console.log(`Entity deleted: ${entity_id}`, { includedInBlock, hash, contract: command.contract })
         } catch (ex) {
@@ -50,7 +50,7 @@ program.command("set-owner <new_owner>")
     .option("-n, --rpc-url <url>", "Rpc url")
     .action(async (new_owner, command) => {
         try {
-            const contractService = new ContractService(command.contract)
+            const contractService = new ContractService(command.contract, command.rpcUrl, process.env['SECRET_KEY'])
             const { includedInBlock, hash } = await contractService.setNewOwner(new_owner)
             console.log(`Owner changed: ${new_owner}`, { includedInBlock, hash, contract: command.contract })
         } catch (ex) {
