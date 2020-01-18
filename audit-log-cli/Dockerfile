@@ -1,8 +1,8 @@
 FROM node:alpine
 
-COPY . .
+WORKDIR /audit-log-cli
 
-WORKDIR audit-log-cli
+COPY . .
 
 RUN npm install
 
