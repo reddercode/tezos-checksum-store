@@ -1,8 +1,35 @@
 import { Tezos } from '@taquito/taquito'
 import { Contract } from '@taquito/taquito/dist/types/contract/contract'
+import axios, { AxiosResponse } from 'axios';
 
 const fs = require('fs')
 const { email, password, mnemonic, secret } = JSON.parse(fs.readFileSync('./faucet.json').toString())
+
+export interface BigMapKeyResponse {
+    key_type: string;
+    key_encoding: string;
+    key_hash: string;
+    key: string;
+    time: string;
+    height: number;
+}
+export interface BigMapValueResponse {
+    key: BigMapKeyResponse;
+    value: any;
+}
+
+
+export interface BigMapKeyUpdatesResponse {
+    big_map: string;
+    action: string;
+    key: {
+        string?: string;
+        int?: string;
+        bytes?: string;
+    };
+    key_hash: string;
+    value: any;
+}
 
 export class ContractService {
 
@@ -25,7 +52,7 @@ export class ContractService {
         }
     }
 
-    constructor(private contractAddress: string, url?: string, private secretKey?: string) {
+    constructor(private contractAddress: string, url?: string, private secretKey?: string, private tzstatsUrl: string = 'https://api.babylonnet.tzstats.com') {
         Tezos.setProvider({ rpc: url || "https://api.tez.ie/rpc/babylonnet" })
     }
 
@@ -96,5 +123,20 @@ export class ContractService {
             const currentSigner = await Tezos.signer.publicKeyHash()
             throw Object.assign(ex, { owner, currentSigner })
         }
+    }
+
+    public async readLastLogs(key: string) {
+        const contract = await this.contractInstance;
+        const storage = await contract.storage<any>()
+        const id = storage.entries.id.toString()
+        return storage.entries.get(key);
+    }
+
+    public async getAllEntries() {
+        const contract = await this.contractInstance;
+        const storage = await contract.storage<any>()
+        const id = storage.entries.id.toString()
+        const { data } = await axios.get<BigMapKeyResponse[]>(`${this.tzstatsUrl}/explorer/bigmap/${id}/keys`)
+        return data.map((x) => x.key);
     }
 }

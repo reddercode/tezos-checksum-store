@@ -58,4 +58,33 @@ program.command("set-owner <new_owner>")
         }
     })
 
+program.command("logs <entity>")
+    .option("-c, --contract <contract>", "Smart contract address", process.env['SECRET_KEY'])
+    .option("-r, --remote-signer <url>", "Remote signer url")
+    .option("-n, --rpc-url <url>", "Rpc url")
+    .action(async (key, command) => {
+        try {
+            const contractService = new ContractService(command.contract, command.rpcUrl, process.env['SECRET_KEY'])
+            const data = await contractService.readLastLogs(key)
+            console.log(JSON.stringify(data, null, 2));
+        } catch (ex) {
+            console.error(ex)
+        }
+    })
+
+program.command("entities")
+    .option("-c, --contract <contract>", "Smart contract address", process.env['SECRET_KEY'])
+    .option("-r, --remote-signer <url>", "Remote signer url")
+    .option("-i, --tzstats <url>", "Tzstats index api url")
+    .option("-n, --rpc-url <url>", "Rpc url")
+    .action(async (command) => {
+        try {
+            const contractService = new ContractService(command.contract, command.rpcUrl, process.env['SECRET_KEY'], command.tzstats)
+            const data = await contractService.getAllEntries()
+            console.log(JSON.stringify(data, null, 2));
+        } catch (ex) {
+            console.error(ex)
+        }
+    })
+
 program.parse(process.argv);
